@@ -2,86 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ConsoleApp2
+namespace DayOfWeek.App
 {
-    public class Learning
+    class Day
     {
-        /// <summary>
-        /// счет времени по сек с вводом
-        /// </summary>
-        public static void Time(int sec)
-        {
-            int hour = sec / 3600;
-            int min = (sec - hour * 3600) / 60;
-            int sec2 = sec - hour * 3600 - min * 60;
-
-            if (hour < 10)
-            {
-                Console.Write("0");
-            }
-            Console.Write(hour + ":");
-
-            if (min < 10)
-            {
-                Console.Write("0");
-            }
-            Console.Write(min + ":");
-
-
-            if (sec2 < 10)
-            {
-                Console.Write("0");
-            }
-            Console.Write(sec2);
-        }
-        /// <summary>
-        /// счет времени по сек без ввода
-        /// </summary>
-        public static void Time()
-        {
-            Console.WriteLine("vvedite sec");
-            int sec = Convert.ToInt32(Console.ReadLine());
-
-            int hour = sec / 3600;
-            int min = (sec - hour * 3600) / 60;
-            int sec2 = sec - hour * 3600 - min * 60;
-
-            if (hour < 10)
-            {
-                Console.Write("0");
-            }
-            Console.Write(hour + ":");
-
-            if (min < 10)
-            {
-                Console.Write("0");
-            }
-            Console.Write(min + ":");
-
-
-            if (sec2 < 10)
-            {
-                Console.Write("0");
-            }
-            Console.Write(sec2);
-        }
-        //public static void Days()
-        //{
-        //    Console.WriteLine("Введите сторону 1 прямоугольника материала");
-        //    int H = Convert.ToInt32(Console.ReadLine());
-
-        //    Console.WriteLine("Введите сторону 2 прямоугольника материала");
-        //    int W = Convert.ToInt32(Console.ReadLine());
-
-        //    Console.WriteLine("Введите сторону 1 прямоугольника");
-        //    int h = Convert.ToInt32(Console.ReadLine());
-
-        //    Console.WriteLine("Введите сторону 2 прямоугольника");
-        //    int w = Convert.ToInt32(Console.ReadLine());
-
-
-
-        //}
         public static void Date()
         {
             // ввод даты
@@ -92,7 +16,10 @@ namespace ConsoleApp2
                 Console.WriteLine("дата указанна не правильно");
                 return;
             }
+
             //СДЕЛАТЬ ПРОВЕРКУ НА ЦИФРЫ/ТОЧКИ В ДАТЕ
+
+
 
             // инициализация
             int day = Convert.ToInt32(date.Substring(0, 2));
@@ -111,23 +38,27 @@ namespace ConsoleApp2
                     leap++;
                 }
             }
+
             //проверка правильности ввода даты
             if (day == 29 && month == 2 && leap == 0)
             {
                 Console.WriteLine("в этом году нет 29.02");
                 return;
             }
-            if (day > monthArr[month-1])
+            if (day > monthArr[month - 1])
             {
                 if (day == 29 && month == 2 && leap == 1)
                 {
-                    
+                    Console.WriteLine("Бонусный день!!!");
                 }
-                Console.WriteLine("в этом месяце меньше дней");
-                return;
+                else
+                {
+                    Console.WriteLine("в этом месяце меньше дней");
+                    return;
+                }
             }
 
-            // счет дней в прошедших годах
+            // счет высокосных дней в прошедших годах
             if (year < 7)
             {
                 days29 = 0;
@@ -143,6 +74,7 @@ namespace ConsoleApp2
                 days29 = (year - 1) / 4 - (year - 1700) / 100 + (year - 1600) / 400 - 1;
             }
 
+            //счет дней в прошедших годах
             days = (year - 1) * 365 + days29;
 
             // добавляем прошедшие месяца
@@ -187,8 +119,6 @@ namespace ConsoleApp2
                 case 6:
                     Console.WriteLine($"{date} понедельник");
                     break;
-                default:
-                    break;
             }
 
             // вывод "высокостный?"
@@ -203,3 +133,4 @@ namespace ConsoleApp2
         }
     }
 }
+
