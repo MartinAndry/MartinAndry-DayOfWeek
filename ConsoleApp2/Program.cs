@@ -104,6 +104,7 @@ namespace ConsoleApp2
             //}
         }
             Learning.Date();
+            Console.WriteLine();
             Console.ReadKey();
         }
     }
