@@ -87,17 +87,21 @@ namespace ConsoleApp2
             // ввод даты
             Console.WriteLine("введите дату в формате дд.мм.гггг");
             string date = Console.ReadLine();
+            if (date.Length != 10)
+            {
+                Console.WriteLine("дата указанна не правильно");
+                return;
+            }
+            //СДЕЛАТЬ ПРОВЕРКУ НА ЦИФРЫ/ТОЧКИ В ДАТЕ
 
             // инициализация
             int day = Convert.ToInt32(date.Substring(0, 2));
             int month = Convert.ToInt32(date.Substring(3, 2));
             int year = Convert.ToInt32(date.Substring(6, 4));
-
-            int[] monthArr = new[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30 };
-
+            int leap = 0;
+            int[] monthArr = new[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
             int days = 0;
             int days29 = 0;
-            int leap = 0;
 
             // текущий год высокостный?
             if (year % 4 == 0 && year != 4)
@@ -106,6 +110,17 @@ namespace ConsoleApp2
                 {
                     leap++;
                 }
+            }
+            //проверка правильности ввода даты
+            if (day == 29 && month == 2 && leap == 0)
+            {
+                Console.WriteLine("в этом году нет 29.02");
+                return;
+            }
+            if (day > monthArr[month-1])
+            {
+                Console.WriteLine("в этом месяце меньше дней");
+                return;
             }
 
             // счет дней в прошедших годах
