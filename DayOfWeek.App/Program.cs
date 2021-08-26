@@ -6,7 +6,12 @@ namespace DayOfWeek.App
     {
         static void Main(string[] args)
         {
-            Day.Date();
+            Console.WriteLine("введите дату в формате дд.мм.гггг");
+            string date = Console.ReadLine();
+
+            Day a = new Day(date);
+            a.WriteDayInform();
+
             Console.ReadKey();
         }
     }

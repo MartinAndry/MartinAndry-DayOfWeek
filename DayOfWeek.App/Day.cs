@@ -6,129 +6,184 @@ namespace DayOfWeek.App
 {
     class Day
     {
-        public static void Date()
+        string date;
+        bool isLeap;
+        int[] monthArr;
+        int leapDays;
+        int days;
+        int day;
+        int month;
+        int year;
+        bool isValidData = true;
+
+
+        public Day(string sDate)
         {
-            // ввод даты
-            Console.WriteLine("введите дату в формате дд.мм.гггг");
-            string date = Console.ReadLine();
-            if (date.Length != 10)
+            Initializatin(sDate);
+        }
+
+        private void Initializatin(string sDate)
+        {
+
+            if (!IsValidInput(sDate))
             {
-                Console.WriteLine("дата указанна не правильно");
-                return;
+                isValidData = false;
             }
 
-            //СДЕЛАТЬ ПРОВЕРКУ НА ЦИФРЫ/ТОЧКИ В ДАТЕ
+            monthArr = new[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
+            date = sDate;
+            day = Convert.ToInt32(sDate.Substring(0, 2));
+            month = Convert.ToInt32(sDate.Substring(3, 2));
+            year = Convert.ToInt32(sDate.Substring(6, 4));
 
+            isLeap = CalculateLeap();
+            if (!IsValidDate())
+            {
+                isValidData = false;
+            }
 
-            // инициализация
-            int day = Convert.ToInt32(date.Substring(0, 2));
-            int month = Convert.ToInt32(date.Substring(3, 2));
-            int year = Convert.ToInt32(date.Substring(6, 4));
-            int leap = 0;
-            int[] monthArr = new[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-            int days = 0;
-            int days29 = 0;
+            leapDays = CalculateLeapDays29();
+            days = CalculateDays();
 
-            // текущий год высокостный?
+        }
+
+        private bool IsValidInput(string sDate)
+        {
+            if (sDate.Length != 10)
+            {
+                Console.WriteLine("дата указанна не правильно");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        private bool CalculateLeap()
+        {
             if (year % 4 == 0 && year != 4)
             {
                 if (year != 1700 && year != 1800 && year != 1900 && year != 2100 && year != 2200 && year != 2300)
                 {
-                    leap++;
+                    return true;
                 }
             }
+            return false;
+        }
 
-            //проверка правильности ввода даты
-            if (day == 29 && month == 2 && leap == 0)
+        private bool IsValidDate()
+        {
+            if (day == 29 && month == 2 && !isLeap)
             {
                 Console.WriteLine("в этом году нет 29.02");
-                return;
+                return false;
             }
             if (day > monthArr[month - 1])
             {
-                if (day == 29 && month == 2 && leap == 1)
+                if (day == 29 && month == 2 && isLeap)
                 {
                     Console.WriteLine("Бонусный день!!!");
                 }
                 else
                 {
                     Console.WriteLine("в этом месяце меньше дней");
-                    return;
+                    return false;
                 }
             }
+            if (month > 12)
+            {
 
-            // счет высокосных дней в прошедших годах
+            }
+            return true;
+        }
+
+        private int CalculateLeapDays29()
+        {
             if (year < 7)
             {
-                days29 = 0;
+                return 0;
             }
 
-            if (year <= 1700 && year > 6)
+            else if (year <= 1700 && year > 6)
             {
-                days29 = (year - 1) / 4 - 1;
+                return (year - 1) / 4 - 1;
             }
 
-            if (year > 1700)
+            else
             {
-                days29 = (year - 1) / 4 - (year - 1700) / 100 + (year - 1600) / 400 - 1;
+                return (year - 1) / 4 - (year - 1700) / 100 + (year - 1600) / 400 - 1;
             }
+        }
 
-            //счет дней в прошедших годах
-            days = (year - 1) * 365 + days29;
+        private int CalculateDays()
+        {
+            int result;
+            result = (year - 1) * 365 + leapDays;
 
             // добавляем прошедшие месяца
             for (int i = 0; i < month - 1; i++)
             {
-                days = days + monthArr[i];
+                result += monthArr[i];
             }
 
             // добавляем прошедший 29ый день
-            if (month > 2 && leap == 1)
+            if (month > 2 && isLeap)
             {
-                days++;
+                result++;
             }
 
             // добавляем прошедшие дни
-            days = days + day;
+            result += day;
+            return result;
+        }
 
-            // счет дня
-            int dayOfWeek = days % 7;
-
-            // перебор + вывод дня
-            switch (dayOfWeek)
+        public void WriteDayInform()
+        {
+            if (isValidData)
             {
-                case 0:
-                    Console.WriteLine($"{date} вторник");
-                    break;
-                case 1:
-                    Console.WriteLine($"{date} среда");
-                    break;
-                case 2:
-                    Console.WriteLine($"{date} четверг");
-                    break;
-                case 3:
-                    Console.WriteLine($"{date} пятница");
-                    break;
-                case 4:
-                    Console.WriteLine($"{date} суббота");
-                    break;
-                case 5:
-                    Console.WriteLine($"{date} воскресенье");
-                    break;
-                case 6:
-                    Console.WriteLine($"{date} понедельник");
-                    break;
-            }
+                EnumDaysOfWeek dayOfWeek = (EnumDaysOfWeek)(days % 7);
 
-            // вывод "высокостный?"
-            if (leap == 1)
-            {
-                Console.WriteLine("Год был высокостный");
+                // перебор + вывод дня
+                switch (dayOfWeek)
+                {
+                    case EnumDaysOfWeek.tuesday:
+                        Console.WriteLine($"{date} вторник");
+                        break;
+                    case EnumDaysOfWeek.wednesday:
+                        Console.WriteLine($"{date} среда");
+                        break;
+                    case EnumDaysOfWeek.thuesday:
+                        Console.WriteLine($"{date} четверг");
+                        break;
+                    case EnumDaysOfWeek.friday:
+                        Console.WriteLine($"{date} пятница");
+                        break;
+                    case EnumDaysOfWeek.sunday:
+                        Console.WriteLine($"{date} суббота");
+                        break;
+                    case EnumDaysOfWeek.saturday:
+                        Console.WriteLine($"{date} воскресенье");
+                        break;
+                    case EnumDaysOfWeek.monday:
+                        Console.WriteLine($"{date} понедельник");
+                        break;
+                }
+
+                // вывод "высокостный?"
+                if (isLeap)
+                {
+                    Console.WriteLine("Год был высокостный");
+                }
+                else
+                {
+                    Console.WriteLine("Год был не высокостный");
+                }
+
             }
             else
             {
-                Console.WriteLine("Год был не высокостный");
+                Console.WriteLine("govnishche");
             }
         }
     }
