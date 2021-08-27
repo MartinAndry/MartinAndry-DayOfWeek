@@ -19,10 +19,10 @@ namespace DayOfWeek.App
 
         public Day(string sDate)
         {
-            Initializatin(sDate);
+            Initialization(sDate);
         }
 
-        private void Initializatin(string sDate)
+        private void Initialization(string sDate)
         {
 
             if (!IsValidInput(sDate))
@@ -60,6 +60,7 @@ namespace DayOfWeek.App
                 return true;
             }
         }
+
         private bool CalculateLeap()
         {
             if (year % 4 == 0 && year != 4)
@@ -74,28 +75,42 @@ namespace DayOfWeek.App
 
         private bool IsValidDate()
         {
-            if (day == 29 && month == 2 && !isLeap)
+            
+            try
             {
-                Console.WriteLine("в этом году нет 29.02");
-                return false;
-            }
-            if (day > monthArr[month - 1])
-            {
-                if (day == 29 && month == 2 && isLeap)
+                if (day == 29 && month == 2 && !isLeap)
                 {
-                    Console.WriteLine("Бонусный день!!!");
+                    Console.WriteLine("в этом году нет 29.02");
+                    return false;
+                }
+                else if (day > monthArr[month - 1])
+                {
+                    if (day == 29 && month == 2 && isLeap)
+                    {
+                        Console.WriteLine("Бонусный день!!!");
+                        return true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("в этом месяце меньше дней");
+                        return false;
+                    }
+                }
+                else if (month > 12)
+                {
+                    Console.WriteLine("13го месяца не бывает");
+                    return false;
                 }
                 else
                 {
-                    Console.WriteLine("в этом месяце меньше дней");
-                    return false;
+                    return true;
                 }
             }
-            if (month > 12)
+            catch (IndexOutOfRangeException)
             {
-
+                Console.WriteLine("data invalid");
             }
-            return true;
+            return false;
         }
 
         private int CalculateLeapDays29()
@@ -179,11 +194,6 @@ namespace DayOfWeek.App
                 {
                     Console.WriteLine("Год был не высокостный");
                 }
-
-            }
-            else
-            {
-                Console.WriteLine("govnishche");
             }
         }
     }
